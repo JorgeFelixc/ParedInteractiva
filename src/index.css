@@ -11,3 +11,23 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+#colors
+#video,
+#main,
+#info{ 
+  display: none;
+}
+
+#loading{ 
+  display:flex;
+}
+.select-custom > option,
+.select-custom{ 
+  border-radius: 5px;
+}
+
+
+.select-custom::selection{
+  
+}
