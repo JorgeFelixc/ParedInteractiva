@@ -5,8 +5,8 @@ import { bindPage, loadVideo, getVideoInputs } from "./utils/bp.Util";
 
 function App() {
        let NET;
-       const Width = window.innerWidth /2;
-       const Height = window.innerHeight /2;
+       const Width = window.innerWidth ;
+       const Height = window.innerHeight ;
        useEffect(() => {
               loadTs();
        }, []);
@@ -24,7 +24,6 @@ function App() {
               // const net = null;
 
               const cv = document.getElementById("finalImg");
-              const ctx = cv.getContext("2d");
 
               loadVideo(null, 'videplayer').then((r) => {
                      StartEverything(net, 'videplayer',cv)
@@ -37,35 +36,38 @@ function App() {
        function StartEverything(net,player,cv){
               const vi = document.getElementById(player);
               const LastCv = document.getElementById("segmented");
-              let ctx = cv.getContext('2d');
-              // cv.setAttribute("width", Width);
-              // cv.setAttribute("height", Height);
+              const ctx = cv.getContext('2d');
+
+              cv.setAttribute("width", Width);
+              cv.setAttribute("height", Height);
+
               LastCv.setAttribute("width", Width);
               LastCv.setAttribute("height", Height);
+
               ctx.clearRect(0,0,Width,Height);
-              let newCanvas = new OffscreenCanvas(Width,Height);
-              console.log("canvas:", newCanvas);
-
-              // let xpos = (Width/2) - (vi.videoWidth/2); 
-              // let ypos = parseInt( Height) - parseInt( vi.videoHeight ) ;
+              let xpos = (Width/2) - (vi.videoWidth/2); 
+              let ypos = parseInt( Height) - parseInt( vi.videoHeight ) ;
               // let bitmapRenderer = LastCv.getContext("bitmaprenderer");
+              function SetVideoOnCanvas(){ 
+                     ctx.drawImage(vi,xpos, ypos);
+                     requestAnimationFrame(SetVideoOnCanvas);
+              }
 
+              // SetVideoOnCanvas();
               async function RedrawVideo(){
                      // ctx.drawImage(vi,xpos,ypos,vi.videoWidth, vi.videoHeight)
                      // beginBodySeg(newCanvas, vi, net);
                      // bitmapRenderer.transferFromImageBitmap(newCanvas.transferToImageBitmap())
                      // let image = new Image();
                      //  beginBodySeg(LastCv, vi);
+                     ctx.drawImage(vi,xpos, ypos);
 
-                     const segmentacion = await NET.segmentMultiPersonParts(vi);
+                     const segmentacion = await NET.segmentMultiPersonParts(cv);
                      // console.log("seg", segmentacion);
                      if(segmentacion.length > 0){ 
                             const coloredPart = bodyPix.toColoredPartMask(segmentacion);
-                            bodyPix.drawPixelatedMask(LastCv, vi, coloredPart,1,0,false,10);
-       
+                            bodyPix.drawPixelatedMask(LastCv, cv, coloredPart,1,0,false,10);
                      }
-                      if(NET){
-                      }
                      // image.id = "pic";
                      // image.src = cv.toDataURL();
                      requestAnimationFrame(RedrawVideo);

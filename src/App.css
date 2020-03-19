@@ -50,6 +50,6 @@
 }
 #finalImg{
   position: absolute;
-  left:-100vw;
-  top:-100vh;
+  /* left:-100vw;
+  top:-100vh; */
 }
